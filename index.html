@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日本語クイズ:地理と戦国時代</title>
+<style>
+:root{--bg:#faf8f4;--fg:#222;--card:#fff;--bd:#ddd;--ac:#b5372b;--ok:#2e7d32;--okbg:#e6f4e7;--ng:#c62828;--ngbg:#fbe9e7;--mu:#666;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1a1c;--fg:#eee;--card:#26262a;--bd:#3a3a40;--ac:#ef6f60;--ok:#81c784;--okbg:#1f3322;--ng:#ef9a9a;--ngbg:#3b2220;--mu:#aaa}}
+:root[data-theme="dark"]{--bg:#1a1a1c;--fg:#eee;--card:#26262a;--bd:#3a3a40;--ac:#ef6f60;--ok:#81c784;--okbg:#1f3322;--ng:#ef9a9a;--ngbg:#3b2220;--mu:#aaa}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;line-height:1.7}
+.w{max-width:600px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.3rem;margin:0 0 4px}
+.sub{color:var(--mu);font-size:.85rem;margin:0 0 16px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:10px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.pg{color:var(--mu);font-size:.85rem;margin-bottom:6px}
+.q{font-size:1.1rem;font-weight:700;margin:0 0 14px}
+.o{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);border-radius:10px;font:inherit;cursor:pointer}
+.o:disabled{cursor:default}
+.o.ok{border-color:var(--ok);background:var(--okbg);color:var(--ok);font-weight:700}
+.o.ng{border-color:var(--ng);background:var(--ngbg);color:var(--ng)}
+.ex{margin-top:12px;padding:12px;border-radius:10px;background:var(--bg);border-left:4px solid var(--ac);font-size:.95rem}
+.nx{margin-top:14px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--ac);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.sc{font-size:2.2rem;font-weight:700;text-align:center;margin:8px 0}
+.c{text-align:center}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>日本語クイズ</h1>
+<p class="sub">N3〜N2レベル向け・各10問</p>
+<div class="tabs"><button id="t-geo">日本地理</button><button id="t-sen">戦国時代</button></div>
+<div id="app"></div>
+</div>
+<script>
+var D={
+geo:[
+["日本でいちばん高い山はどれですか。",["富士山","北岳","立山","阿蘇山"],"標高3,776メートル。静岡県と山梨県にまたがっています。"],
+["日本でいちばん大きい湖はどれですか。",["琵琶湖","浜名湖","霞ヶ浦","十和田湖"],"滋賀県にあり、面積は約670平方キロメートルです。"],
+["日本でいちばん長い川はどれですか。",["信濃川","利根川","石狩川","木曽川"],"全長367キロメートル。長野県では「千曲川」と呼ばれます。"],
+["面積がいちばん大きい都道府県はどこですか。",["北海道","岩手県","長野県","福島県"],"北海道は日本全体の約5分の1を占めています。"],
+["「天下の台所」と呼ばれ、食文化で有名な都市はどこですか。",["大阪","名古屋","福岡","広島"],"江戸時代から全国の食べ物が集まる商業の中心でした。"],
+["日本の主な4つの島は、本州・北海道・九州とあと一つは何ですか。",["四国","沖縄本島","佐渡島","淡路島"],"四国は愛媛・香川・徳島・高知の4県からなります。"],
+["冬に雪がたくさん降る日本海側の県はどれですか。",["新潟県","高知県","宮崎県","千葉県"],"冷たい季節風が日本海の水蒸気を運び、大雪になります。"],
+["「トヨタ」の本社がある県はどこですか。",["愛知県","宮城県","山口県","群馬県"],"愛知県の豊田市にあります。中京工業地帯の中心です。"],
+["みかんの生産量が多いことで知られる県はどれですか。",["和歌山県","青森県","山形県","長野県"],"温暖な気候で、みかんが盛んです。青森はりんご、山形はさくらんぼが有名です。"],
+["広島県にある世界遺産の神社はどれですか。",["厳島神社","伏見稲荷大社","出雲大社","日光東照宮"],"宮島にあり、海の中の大きな鳥居で有名です。1996年に登録されました。"]
+],
+sen:[
+["1467年に京都で始まり、戦国時代のきっかけになった戦いはどれですか。",["応仁の乱","壬申の乱","承久の乱","保元の乱"],"約11年続き、幕府の力が弱くなりました。"],
+["1543年、種子島にポルトガル人が伝えたものは何ですか。",["鉄砲","時計","キリスト教","じゃがいも"],"鉄砲はすぐ日本中に広まり、戦い方が変わりました。キリスト教は1549年です。"],
+["1560年、桶狭間の戦いで今川義元を破った武将は誰ですか。",["織田信長","豊臣秀吉","徳川家康","武田信玄"],"人数が少ない軍で大きな今川軍に勝ち、信長は有名になりました。"],
+["上杉謙信と武田信玄が何度も戦った場所はどこですか。",["川中島","関ヶ原","長篠","桶狭間"],"今の長野県にあります。1561年の戦いが特に有名です。"],
+["「甲斐の虎」と呼ばれた、今の山梨県の武将は誰ですか。",["武田信玄","上杉謙信","伊達政宗","北条氏康"],"強い騎馬隊で有名でした。上杉謙信は「越後の龍」と呼ばれました。"],
+["1582年、京都の本能寺で織田信長を攻めた家臣は誰ですか。",["明智光秀","石田三成","柴田勝家","前田利家"],"これを「本能寺の変」といいます。理由は今もはっきりしていません。"],
+["1588年に「刀狩」を行い、農民から武器を集めた人は誰ですか。",["豊臣秀吉","徳川家康","織田信長","北条早雲"],"農民の反乱を防ぎ、武士と農民の身分を分けました。"],
+["「独眼竜」と呼ばれた東北地方の武将は誰ですか。",["伊達政宗","真田幸村","加藤清正","黒田官兵衛"],"子どものころ病気で右目を失いました。仙台の街をつくりました。"],
+["息子たちに「三本の矢」の話をしたといわれる、中国地方の武将は誰ですか。",["毛利元就","長宗我部元親","島津義弘","北条氏康"],"兄弟で協力することの大切さを教えた話です。実話かどうかははっきりしません。"],
+["1600年の関ヶ原の戦いに勝ち、1603年に江戸幕府を開いた人は誰ですか。",["徳川家康","石田三成","豊臣秀頼","明智光秀"],"「天下分け目の戦い」に勝ち、約260年続く江戸時代が始まりました。"]
+]};
+var cur="geo",qs=[],i=0,sc=0,ans=false,app=document.getElementById("app");
+function sh(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function start(k){
+cur=k;i=0;sc=0;ans=false;
+qs=sh(D[k].map(function(q){return{p:q[0],o:sh(q[1]),a:q[1][0],e:q[2]}}));
+document.getElementById("t-geo").className=k==="geo"?"on":"";
+document.getElementById("t-sen").className=k==="sen"?"on":"";
+draw();
+}
+function draw(){
+if(i>=qs.length){
+app.innerHTML='<div class="card c"><div class="pg">結果</div><div class="sc">'+sc+' / '+qs.length+'</div><p>'+(sc>=9?"すばらしい!":sc>=6?"よくできました!":"もう一度チャレンジしてみましょう。")+'</p><button class="nx" id="re">もう一度</button></div>';
+document.getElementById("re").onclick=function(){start(cur)};
+return;
+}
+var q=qs[i],h='<div class="card"><div class="pg">'+(i+1)+' / '+qs.length+'</div><p class="q">'+q.p+'</p>';
+q.o.forEach(function(t,n){h+='<button class="o" data-n="'+n+'">'+t+'</button>'});
+h+='<div id="fb"></div></div>';
+app.innerHTML=h;
+var bs=app.querySelectorAll(".o");
+for(var n=0;n<bs.length;n++){bs[n].onclick=pick}
+}
+function pick(e){
+if(ans)return;ans=true;
+var q=qs[i],bs=app.querySelectorAll(".o"),right=false;
+for(var n=0;n<bs.length;n++){
+var b=bs[n],t=q.o[n];b.disabled=true;
+if(t===q.a)b.className="o ok";
+if(b===e.currentTarget&&t!==q.a)b.className="o ng";
+if(b===e.currentTarget&&t===q.a)right=true;
+}
+if(right)sc++;
+document.getElementById("fb").innerHTML='<div class="ex"><b>'+(right?"正解です!":"ざんねん。")+'</b> '+q.e+'</div><button class="nx" id="nx">'+(i===qs.length-1?"結果を見る":"次へ")+'</button>';
+document.getElementById("nx").onclick=function(){i++;ans=false;draw()};
+}
+document.getElementById("t-geo").onclick=function(){start("geo")};
+document.getElementById("t-sen").onclick=function(){start("sen")};
+start("geo");
+</script>
+</body>
+</html>
